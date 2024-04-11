@@ -4,7 +4,9 @@ This library aims to provide Rust like error handling in typescript.
 
 ## Error handling
 
-In many languages errors are Values, in rust this is implemented using the `Result` enum, sadly typescript doesn't provide enums that are powerfull enough.  
+In many languages errors are Values, in rust this is implemented using the 
+`Result` enum, sadly typescript doesn't provide enums that are powerful 
+enough.  
 
 Here is a real code example:
 
@@ -25,18 +27,21 @@ fn main() {
 ```
 ### JavaScript
 
-In javascript you surely know the try catch controll flow, but it has multiple flaws:
+In JavaScript you surely know the try catch control flow, but it has multiple 
+flaws:
 
-- It doesn't force you to address potentional errors
+- It doesn't force you to address potential errors
 - It doesn't even provide you with the info that an error could be thrown
 - It creates a new scope
-- As [anything can be thrown](https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript) in JavaScript the catched error may not be an error at all
-    - There is basically no typesafety
+- As [anything can be 
+thrown](https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescr
+ipt) in JavaScript the cached error may not be an error at all
+    - There is basically no Type safety
 
-Using erresult error mangement looks more like this:
+Using Erresult error management looks more like this:
 
 ```ts
-import { Result } from "erresult";
+import { result } from "erresult";
 
 const numberStr = "42";
 
@@ -46,7 +51,7 @@ enum Error {
 	TooSmall,
 }
 
-new Result<number, Error>((Ok, Err) => {
+result<number, Error>((Ok, Err) => {
 	const number = parseInt(numberStr);
 
 	if (isNaN(number)) return Err(Error.NotANumber)

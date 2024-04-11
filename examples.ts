@@ -1,4 +1,4 @@
-import { Result } from "./src";
+import { result } from "./src";
 
 const numberStr = "42";
 
@@ -8,7 +8,7 @@ enum ConvError {
 	TooSmall = 2,
 }
 
-new Result<number, ConvError>((Ok, Err) => {
+result<number, ConvError>((Ok, Err) => {
 	const number = parseInt(numberStr);
 
 	if (Number.isNaN(number)) return Err(ConvError.NotANumber);

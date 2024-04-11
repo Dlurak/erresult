@@ -52,47 +52,24 @@ export type Err<E> = {
  * @template E The type of a negative result
  */
 export type Callback<T, E> = (
-	/**
-	 * The parameter which can be used to return a positive value
-	 */
 	Ok: (val: T) => Ok<T>,
-	/**
-	 * The parameter which can be used to return an error
-	 */
 	Err: (err: E) => Err<E>,
 ) => Ok<T> | Err<E>;
 
-/**
- * The class to use rust like Results
- * @template T The type of a positive result
- * @template E The type of a negative result
- */
-export class Result<T, E> {
+export type CallbackPromise<T, E> = (
+	Ok: (val: T) => Ok<T>,
+	Err: (err: E) => Err<E>,
+) => Promise<Ok<T> | Err<E>>;
+
+class Result<T, E> {
 	private value: T | null;
 	private err: E | null;
 	private thrownMsg: null | string;
 
-	/**
-	 * @param callback The callback where errors will be handeld
-	 * It gets two arguments, both are functions.
-	 * The first one ecan be used to return positive data
-	 * The second one to return negative data
-	 * @template T The type of a positive result
-	 * @template E The type of a negative result
-	 */
-	constructor(callback: Callback<T, E>) {
-		this.value = null;
-		this.err = null;
-		this.thrownMsg = null;
-
-		try {
-			const result = callback(ok, err);
-
-			if (result.status === "ok") this.value = result.value;
-			if (result.status === "err") this.err = result.err;
-		} catch (e) {
-			this.thrownMsg = getErrorMessage(e);
-		}
+	constructor(value: T | null, err: E | null, thrownMsg: string | null) {
+		this.value = value;
+		this.err = err;
+		this.thrownMsg = thrownMsg;
 	}
 
 	/**
@@ -170,4 +147,43 @@ export class Result<T, E> {
 	or(fallback: T) {
 		return this.value || fallback;
 	}
+}
+
+/**
+ * A function to create a class with rust like error handling
+ * @template T The type of a positive result
+ * @template E The type of a negative result
+ */
+export function result<T, E>(callback: Callback<T, E>) {
+	try {
+		const result = callback(ok, err);
+
+		if (result.status === "ok")
+			return new Result<T, E>(result.value, null, null);
+		if (result.status === "err")
+			return new Result<T, E>(null, result.err, null);
+
+		throw new Error(
+			"This is a bug in erresult, if this happens, please open a github issue",
+		);
+	} catch (e) {
+		return new Result<T, E>(null, null, getErrorMessage(e));
+	}
+}
+
+export async function asyncResult<T, E>(callback: CallbackPromise<T, E>) {
+	return callback(ok, err)
+		.then((result) => {
+			if (result.status === "ok")
+				return new Result<T, E>(result.value, null, null);
+			if (result.status === "err")
+				return new Result<T, E>(null, result.err, null);
+
+			throw new Error(
+				"This is a bug in erresult, if this happens, please open a github issue",
+			);
+		})
+		.catch((e) => {
+			return new Result<T, E>(null, null, getErrorMessage(e));
+		});
 }
