@@ -162,11 +162,11 @@ export class Result<T, E> {
 	}
 
 	/**
-	* Return a value or the specified fallback
-	* @param fallback the fallback will be used if the callback returned an error, else the *real* value be used
-	* @returns Ideally the value (positive return of the callback) but if the callback threw or errored the fallback
-	* will be returned
-	*/
+	 * Return a value or the specified fallback
+	 * @param fallback the fallback will be used if the callback returned an error, else the *real* value be used
+	 * @returns Ideally the value (positive return of the callback) but if the callback threw or errored the fallback
+	 * will be returned
+	 */
 	or(fallback: T) {
 		return this.value || fallback;
 	}
