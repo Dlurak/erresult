@@ -1,0 +1,30 @@
+{
+  "name": "library",
+  "description": "",
+  "version": "1.0.0",
+  "license": "MIT",
+  "keywords": [],
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepublish": "pnpm build",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "format": "biome format . --write",
+    "lint:biome": "biome check .",
+    "lint:fix": "biome check --apply .",
+    "lint:tsc": "tsc",
+    "lint": "pnpm lint:biome && pnpm lint:tsc",
+    "test": "vitest ",
+    "test:cov": "vitest run --coverage",
+    "document": "typedoc --out docs src/index.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.5.3",
+    "@vitest/coverage-v8": "^1.3.1",
+    "tsup": "^8.0.2",
+    "typedoc": "^0.25.8",
+    "typescript": "^5.3.3",
+    "vitest": "^1.3.1"
+  }
+}
