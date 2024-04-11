@@ -81,4 +81,3 @@ describe("result", () => {
 		expect(thrownResult.or("default")).toBe("default");
 	});
 });
-
