@@ -80,6 +80,18 @@ describe("result", () => {
 		expect(errResult.or("default")).toBe("default");
 		expect(thrownResult.or("default")).toBe("default");
 	});
+
+	it("map", () => {
+		expect(successResult.map((val) => `Success: ${val}`).get().value).toBe(
+			"Success: success",
+		);
+		expect(errResult.map((val) => `Success: ${val}`).get().value).toBe(
+			undefined,
+		);
+		expect(thrownResult.map((val) => `Success: ${val}`).get().value).toBe(
+			undefined,
+		);
+	});
 });
 
 describe("async", () => {

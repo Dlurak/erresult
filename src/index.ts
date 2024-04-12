@@ -145,7 +145,13 @@ class Result<T, E> {
 	 * will be returned
 	 */
 	or(fallback: T) {
-		return this.value || fallback;
+		return this.value ?? fallback;
+	}
+
+	map<R>(callback: (val: T) => R) {
+		return this.value
+			? new Result<R, E>(callback(this.value), null, null)
+			: this;
 	}
 }
 
