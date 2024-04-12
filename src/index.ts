@@ -153,6 +153,19 @@ class Result<T, E> {
 			? new Result<R, E>(callback(this.value), null, null)
 			: this;
 	}
+
+	andThen<S, F>(
+		callback: (
+			val: T,
+			Ok: (val: S) => Ok<S>,
+			Err: (err: F) => Err<F>,
+		) => Ok<S> | Err<F>,
+	) {
+		if (!this.value) return this;
+
+		const { value } = this;
+		return result<S, F>(() => callback(value, ok, err));
+	}
 }
 
 /**

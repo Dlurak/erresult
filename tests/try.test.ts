@@ -92,6 +92,37 @@ describe("result", () => {
 			undefined,
 		);
 	});
+
+	it("and then", () => {
+		expect(
+			successResult
+				.andThen((val, _, err) => {
+					expect(val).toBe("success");
+					return err("err");
+				})
+				.get().err?.err,
+		).toBe("err");
+
+		expect(
+			errResult
+				.andThen((_, __, err) => {
+					// this shouldn't be called as the callback will
+					// only be called for positive results
+					expect(true).toBe(false);
+					return err("and then");
+				})
+				.get().err?.err,
+		).toBe("err");
+
+		expect(
+			thrownResult
+				.andThen((_, __, err) => {
+					expect(true).toBe(false);
+					return err("thrown and then");
+				})
+				.get().err?.msg,
+		).toBe("thrown");
+	});
 });
 
 describe("async", () => {
