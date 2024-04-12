@@ -248,3 +248,5 @@ export async function asyncResult<T, E>(callback: CallbackPromise<T, E>) {
 			});
 		});
 }
+
+export type ResultType<T, E> = typeof Result<T, E>;
