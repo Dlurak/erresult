@@ -91,6 +91,11 @@ describe("result", () => {
 		expect(thrownResult.map((val) => `Success: ${val}`).get().value).toBe(
 			undefined,
 		);
+
+		const typeResult = result<{ value: boolean }, unknown>((ok, err) =>
+			ok({ value: true }),
+		);
+		expect(typeResult.map((r) => r.value).or(false));
 	});
 
 	it("and then", () => {
@@ -122,6 +127,11 @@ describe("result", () => {
 				})
 				.get().err?.msg,
 		).toBe("thrown");
+
+		const typeResult = result<"success", "first">((ok, _) =>
+			ok("success"),
+		).andThen<"success" | "no", "second">((val, ok, _) => ok(val));
+		expect(typeResult.or("no")).toBe("success");
 	});
 });
 
